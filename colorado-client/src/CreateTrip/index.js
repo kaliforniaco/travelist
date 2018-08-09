@@ -10,7 +10,7 @@ class CreateTrip extends Component {
     this.state = {
       title: '',
       description: '',
-      userGivenName: (auth.getProfile().family_name + auth.getProfile().given_name)
+      userGivenName: (auth.getProfile().email)
     }
   }
   updateTrip = (e) => {
