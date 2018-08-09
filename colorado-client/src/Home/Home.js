@@ -18,6 +18,9 @@ class Home extends Component {
         {
           isAuthenticated() && (
               <div className="">
+
+                <h1> {auth.getProfile().email} </h1>
+
                 You are logged in {propName}!
 
                 <TripsContainer />
