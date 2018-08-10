@@ -13,6 +13,7 @@ class CreateTrip extends Component {
       description: '',
       email: auth.getProfile().email,
       googlePlace: '',
+      googleLatLong:[],
     }
   }
   updateTrip = (e) => {
@@ -25,12 +26,20 @@ class CreateTrip extends Component {
 
 setFormLocation = (googleLocation) => {
 
-let parsedLoc = googleLocation.split(',')
-this.setState({
-  googlePlace: parsedLoc[0],
-})
+    let parsedLoc = googleLocation.split(',')
+
+    this.setState({
+      googlePlace: parsedLoc[0],
+    })
+}
+
+setLatLong = (latLng) => {
+      this.setState({
+        googleLatLong: latLng
+      })
 
 }
+
 
   render(){
     return(
@@ -39,7 +48,7 @@ this.setState({
 
 
 
-    <LocationSearchInput setFormLocation={this.setFormLocation} />
+    <LocationSearchInput setFormLocation={this.setFormLocation} setLatLong={this.setLatLong}/>
 
     <form onSubmit={this.props.addTrip.bind(this, this.state)}>
       <label>

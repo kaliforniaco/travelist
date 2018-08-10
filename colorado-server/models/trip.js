@@ -6,6 +6,7 @@ const tripSchema = new mongoose.Schema({
   description: String,
   email: String,
   googlePlace: {},
+  googleLatLong: [],
 });
 
 
