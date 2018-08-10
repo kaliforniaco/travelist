@@ -1,180 +1,71 @@
+// src/components/LocationSearchInput.js
 import React from 'react';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
- 
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import { classnames } from '../helpers';
+import CreateTrip from '../CreateTrip';
+
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: '' };
+    this.state = { address: '' }
   }
- 
-  handleChange = address => {
-    this.setState({ address });
-  };
- 
-  handleSelect = address => {
+
+  handleChange = (address) => {
+    this.setState({ address })
+  }
+
+  // When the user selects an autocomplete suggestion...
+  handleSelect = (address) => {
+    // Pull in the setFormLocation function from the parent ReportForm
+    const setFormLocation = this.props.setFormLocation
+
     geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
-      .catch(error => console.error('Error', error));
-  };
- 
+      .then(function(results){
+        // Set the location in the parent ReportFrom
+        setFormLocation(results[0].formatted_address)
+      })
+      .catch(error => console.error('Error', error))
+  }
+
   render() {
+    const renderInput = ({ getInputProps, getSuggestionItemProps, suggestions }) => (
+      <div className="autocomplete-root">
+        <input className="form-control" {...getInputProps()} />
+        <div className="autocomplete-dropdown-container">
+          {suggestions.map(suggestion => (
+
+
+            <div {...getSuggestionItemProps(suggestion)} className="suggestion">
+              <span>{suggestion.description}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    // Limit the suggestions to show only cities in the US
+    const searchOptions = {
+      types: ['(cities)'],
+      componentRestrictions: {country: "us"}
+     }
+
     return (
       <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
+        // Pass the search options prop
+        searchOptions={searchOptions}
       >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <input
-              {...getInputProps({
-                placeholder: 'Search Places ...',
-                className: 'location-search-input',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        {renderInput}
       </PlacesAutocomplete>
     );
   }
 }
+
 export default LocationSearchInput
 
 
-// class LocationSearchInput extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = { address: 'San Francisco, CA' }
-//     this.onChange = (address) => this.setState({ address })
-//   }
- 
-//   handleFormSubmit = (event) => {
-//     event.preventDefault()
- 
-//     geocodeByAddress(this.state.address)
-//       .then(results => getLatLng(results[0]))
-//       .then(latLng => console.log('Success', latLng))
-//       .catch(error => console.error('Error', error))
-//   }
-// class LocationSearchInput extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//      address: '',
-//      latlng: [],
-//       }
-//   }
-
-//   handleChange = (address) => {
-//     this.setState({ address })
-//   }
-// ////////////////////////////////////////////////////////////////////
-//   handleSelect = address => {
-//     let setLatLong = this.props.setLatLong
-//     let setFormLocation = this.props.setFormLocation
-
-//     geocodeByAddress(address)
-//       .then(address => setFormLocation(address[0].formatted_address))
-//       .then(results => getLatLng(results[0]))
-//       .then(latLng => setLatLong(latLng) )
-//       .catch(error => console.error('Error', error));
-//   };
-
-  // handleSelect = (address) => {
-  //   // Pull in the setFormLocation function from the parent ReportForm
-  //   const setFormLocation = this.props.setFormLocation
-
-  //   geocodeByAddress(address)
-  //     .then(function(results){
-  //       // Set the location in the parent ReportFrom
-  //       setFormLocation(results[0].formatted_address)
-  //       return getLatLng(results[0])
-
-  //     })
-  //     .then(({lat, lng}) => {
-  //       this.setState({latlng: [lng,lat]})
-  //       this.props.setLatLong(this.state.latlng)
-  //     })
-
-  //     .catch(error => console.error('Error', error))
-  // }
-// geocodeByAddress(address)
-//   .then(results => {
-//     this.setstate({placeQuery:results[0].address_components[0].short_name})
-//     return getLatLng(results[0])
-//     console.log('some place', this.state.latlng);
-//   })
-//   .then(({lat , lng}) => {
-//     this.setState({latlng: [lng,lat]})
-//     this.props.setLatLong(this.state.latlng)
-
-//     console.log('latlng', this.state.latlng);
-//   //
-// }
-
-//   render() {
-//     const renderInput = ({ getInputProps, getSuggestionItemProps, suggestions }) => (
-//       <div className="autocomplete-root">
-//         <input className="form-control" {...getInputProps()} />
-//         <div className="autocomplete-dropdown-container">
-//           {suggestions.map(suggestion => (
-
-
-//             <div {...getSuggestionItemProps(suggestion)} className="suggestion">
-//               <span>{suggestion.description}</span>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     );
-
-//     // Limit the suggestions to show only cities in the US
-//     const searchOptions = {
-//       types: ['(cities)'],
-//       componentRestrictions: {country: "us"}
-//      }
-
-//     return (
-//       <PlacesAutocomplete
-//         value={this.state.address}
-//         onChange={this.handleChange}
-//         onSelect={this.handleSelect}
-//         // Pass the search options prop
-//         searchOptions={searchOptions}
-//       >
-//         {renderInput}
-//       </PlacesAutocomplete>
-//     );
-//   }
-// }
-
-// export default LocationSearchInput
 
 
 
@@ -183,9 +74,7 @@ export default LocationSearchInput
 
 
 
-
-
-/// import React from 'react';
+// import React from 'react';
 // import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 // import { classnames } from '../helpers';
 // import CreateTrip from '../CreateTrip';

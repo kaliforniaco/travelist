@@ -7,6 +7,7 @@ const tripSchema = new mongoose.Schema({
   email: String,
   googlePlace: {},
   googleLatLong: [],
+  // googleLat: Number,
 });
 
 
