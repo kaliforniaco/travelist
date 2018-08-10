@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TripsContainer from '../TripsContainer';
 import Map from '../googleMaps/map'
-import SearchBar from '../googleMaps/SearchBar'
+import LocationSearchInput from '../googleMaps/LocationSearchInput'
 import Auth from '../Auth/Auth'
 
 const auth = new Auth();
@@ -32,7 +32,7 @@ class Home extends Component {
               
               <hr/>
                 </div>
-                    <SearchBar />
+
 
                     <Map />
               }

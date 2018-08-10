@@ -20,7 +20,7 @@ class TripContainer extends Component {
         lat: '',
         long: '',
         description: '',
-        userGivenName: ''
+        email: ''
       }
     }
   }

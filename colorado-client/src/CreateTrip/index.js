@@ -1,28 +1,46 @@
 import React, { Component } from 'react';
 import Auth from '../Auth/Auth'
+import LocationSearchInput from '../googleMaps/LocationSearchInput'
+
 const auth = new Auth();
 
-
 class CreateTrip extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
 
     this.state = {
       title: '',
       description: '',
-      email: auth.getProfile().email
-      // userGivenName: (auth.getProfile().family_name + auth.getProfile().given_name)
+      email: auth.getProfile().email,
+      googlePlace: '',
     }
   }
   updateTrip = (e) => {
 
-    this.setState({[e.currentTarget.name]: e.currentTarget.value});
+    this.setState({
+      [e.currentTarget.name]: e.currentTarget.value
+    });
 
   }
 
+setFormLocation = (googleLocation) => {
+
+let parsedLoc = googleLocation.split(',')
+this.setState({
+  googlePlace: parsedLoc[0],
+})
+
+}
+
   render(){
-    console.log(this.state.userGivenName, ' this is userGivenName')
-  return (
+    return(
+
+    <div>
+
+
+
+    <LocationSearchInput setFormLocation={this.setFormLocation} />
+
     <form onSubmit={this.props.addTrip.bind(this, this.state)}>
       <label>
         Trip:
@@ -31,18 +49,22 @@ class CreateTrip extends Component {
 
 
 
-      
       <label>
         Description:
         <textarea name="description" onChange={this.updateTrip}/>
       </label>
-      <input type="hidden" id="userId" name="userId" value={this.state.userGivenName} />
+      <input type="hidden" id="userId" name="userId" value={this.state.email} />
       <input type='Submit'/>
     </form>
-
+</div>
     )
   }
 }
 
 
 export default CreateTrip;
+
+
+
+
+

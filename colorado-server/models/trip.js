@@ -5,6 +5,7 @@ const tripSchema = new mongoose.Schema({
   title: String,
   description: String,
   email: String,
+  googlePlace: {},
 });
 
 
