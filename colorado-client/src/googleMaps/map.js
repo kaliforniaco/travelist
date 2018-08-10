@@ -1,9 +1,11 @@
 
 import React, { Component } from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
-
+import SearchBar from 'SearchBar'
 
 export class MapContainer extends Component {
+  constructor(props){
+  super(props);
   render() {
 
     // let quakeMarkers = this.props.quakesData.map( ( quake, index ) =>
@@ -23,14 +25,14 @@ export class MapContainer extends Component {
     return (
       <div className="mapContainer">
 	      <Map
-	        google={this.props.google}
+	        google={...this.props.google}
 	        initialCenter={{
-		        lat: 39.7392358,
-		        lng: -104.990251
+		        lat: {props.google.latitude} || 39.7392358,
+		        lng: {props.google.longitude} || -104.990251
 	      }}
 	      style={{
-	      	width: '73%',
-	      	 height: '80%'
+	      	width: '50%',
+	      	//height: '80%'
 	      }}
 
 	      zoom={7}
@@ -44,6 +46,7 @@ export class MapContainer extends Component {
      	 </Map>
       </div>
     );
+  }
   }
 }
 
